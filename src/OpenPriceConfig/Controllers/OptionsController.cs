@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OpenPriceConfig.Data;
 using OpenPriceConfig.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OpenPriceConfig.Controllers
 {
+    [Authorize]
     public class OptionsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -69,6 +71,7 @@ namespace OpenPriceConfig.Controllers
             ViewData["Configurator"] = await _context.Configurator.Where(c => c.ID == id).FirstAsync();
             ViewData["ConfiguratorID"] = new SelectList(_context.Configurator, "ID", "Name");
             ViewData["DescriptionLocaleID"] = new SelectList(_context.Locale, "ID", "Tag");
+            PopulateInputTypeDropDownList(null);
             return View();
         }
 
@@ -77,7 +80,7 @@ namespace OpenPriceConfig.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int? id/*Configurator ID*/, [Bind("Description,DescriptionLocaleID,Name,OptionTag,Order,Price")] Option option)
+        public async Task<IActionResult> Create(int? id/*Configurator ID*/, [Bind("Description,DescriptionLocaleID,Name,OptionTag,Order,Price,InputType")] Option option)
         {
             if (ModelState.IsValid)
             {
@@ -116,7 +119,12 @@ namespace OpenPriceConfig.Controllers
             {
                 return NotFound();
             }
+
+
+            PopulateInputTypeDropDownList(option);
+
             ViewData["DescriptionLocaleID"] = new SelectList(_context.Locale, "ID", "Tag", option.DescriptionLocaleID);
+            
             return View(option);
         }
 
@@ -125,7 +133,7 @@ namespace OpenPriceConfig.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Description,DescriptionLocaleID,Name,OptionTag,Order,Price")] Option option)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Description,DescriptionLocaleID,Name,OptionTag,Order,Price,InputType")] Option option)
         {
             if (id != option.ID)
             {
@@ -169,7 +177,7 @@ namespace OpenPriceConfig.Controllers
                 return NotFound();
             }
 
-            var option = await _context.Option.SingleOrDefaultAsync(m => m.ID == id);
+            var option = await _context.Option.Include(o => o.Configurator).SingleOrDefaultAsync(m => m.ID == id);
             if (option == null)
             {
                 return NotFound();
@@ -183,10 +191,12 @@ namespace OpenPriceConfig.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var option = await _context.Option.SingleOrDefaultAsync(m => m.ID == id);
+            var option = await _context.Option.Include(o => o.Configurator).SingleOrDefaultAsync(m => m.ID == id);
+            var configurator = option.Configurator;
+            await ClearPricings(id);
             _context.Option.Remove(option);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { id = configurator.ID });
         }
 
         public async Task<IActionResult> ClearPricings(int? id /*optionID*/)
@@ -265,6 +275,17 @@ namespace OpenPriceConfig.Controllers
             return _context.Option.Any(e => e.ID == id);
         }
 
+        void PopulateInputTypeDropDownList(Option option)
+        {
+            List<object> inputTypes = new List<object>() { };
+            var inputTypesNames = Enum.GetNames(typeof(Option.InputTypes));
+            var inputTypesValues = Enum.GetValues(typeof(Option.InputTypes));
+            for (int i = 0; i < inputTypesNames.Length; i++)
+            {
+                inputTypes.Add(new { Value = inputTypesValues.GetValue(i), Name = inputTypesNames[i] });
+            }
+            ViewData["InputTypeID"] = new SelectList(inputTypes, "Value", "Name", option?.InputType);
+        }
         
     }
 }

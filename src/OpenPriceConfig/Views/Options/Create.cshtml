@@ -43,6 +43,14 @@
                 <select asp-for="DescriptionLocaleID" class ="form-control" asp-items="ViewBag.DescriptionLocaleID"></select>
             </div>
         </div>
+
+        <div class="form-group">
+            <label asp-for="InputType" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="InputType" class="form-control" asp-items="ViewBag.InputTypeID"></select>
+                <span asp-validation-for="InputType" class="text-danger" />
+            </div>
+        </div>
         
         <div class="form-group">
             <label asp-for="OptionTag" class="col-md-2 control-label"></label>

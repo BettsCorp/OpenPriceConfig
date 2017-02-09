@@ -22,7 +22,13 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.DescriptionLocaleID)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.OptionTag)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InputType)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
@@ -43,7 +49,13 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.DescriptionLocale.Tag)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.OptionTag)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InputType)
             </td>
             <td>
                 <a asp-action="EditBracketPricings" asp-route-id="@item.ID">
@@ -61,6 +73,7 @@
                     }
                 </a>
             </td>
+            
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>

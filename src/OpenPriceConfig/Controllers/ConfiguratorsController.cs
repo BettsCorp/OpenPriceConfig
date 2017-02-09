@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OpenPriceConfig.Data;
 using OpenPriceConfig.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OpenPriceConfig.Controllers
 {
+    [Authorize]
     public class ConfiguratorsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -94,9 +96,19 @@ namespace OpenPriceConfig.Controllers
 
             if (ModelState.IsValid)
             {
+                
                 try
                 {
+                    
+                    var options = await _context.Option.Include(o => o.BracketPricing).ToListAsync();
+                    foreach (var option in options)
+                    {
+                        option.UpdateBracketPricings(configurator.FloorsNumber);
+                        _context.Update(option);
+                    }
+
                     _context.Update(configurator);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

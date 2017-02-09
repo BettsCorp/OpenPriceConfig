@@ -3,29 +3,62 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using OpenPriceConfig.Data;
+using Microsoft.EntityFrameworkCore;
+using OpenPriceConfig.Models;
 
 namespace OpenPriceConfig.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+
+        private readonly ApplicationDbContext _context;
+
+        public HomeController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
+        }
+        
+        public async Task<IActionResult> Index(int? id /*configuratorID*/)
+        {
+            Configurator configurator = null;
+            if (id == null)
+            {
+                configurator = await _context.Configurator
+                    .Include(c => c.Options)
+                    .FirstAsync();
+            }
+
+            else
+            {
+                configurator = await _context.Configurator.Where(c => c.ID == id)
+                    .Include(c => c.Options)
+                    .SingleAsync();
+            }
+
+            if (configurator == null)
+                return NotFound();
+
+            return View(configurator);
         }
 
-        public IActionResult About()
+        [HttpPost]
+        public async Task<string> GeneratePrice()
         {
-            ViewData["Message"] = "Your application description page.";
+            var dict = new Dictionary<string, object>();
+            var keys = Request.Form.Keys;
+            string output = "";
+            foreach (var key in keys)
+            {
+                dict.Add(key, Request.Form[key]);
+                output += $"{key} =  {Request.Form[key]}  <br /> \n  ";
+            }
 
-            return View();
+            
+            await Task.Delay(1);
+            return output;
         }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
 
         public IActionResult Error()
         {

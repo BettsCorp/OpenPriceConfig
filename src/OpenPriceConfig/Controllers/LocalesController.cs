@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OpenPriceConfig.Data;
 using OpenPriceConfig.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OpenPriceConfig.Controllers
 {
+    [Authorize]
     public class LocalesController : Controller
     {
         private readonly ApplicationDbContext _context;

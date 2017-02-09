@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-OpenPriceConfig-8e31080a-0c7a-494e-b625-039bb99215ff",
 
   "dependencies": {
@@ -41,10 +41,11 @@
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc":  {
+    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
       "version": "1.0.0-preview2-final",
       "type": "build"
-    }
+    },
+    "Microsoft.Extensions.Configuration.Binder": "1.0.0"
   },
 
   "tools": {
