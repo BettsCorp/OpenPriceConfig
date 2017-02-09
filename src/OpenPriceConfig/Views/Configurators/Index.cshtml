@@ -1,0 +1,47 @@
+@model IEnumerable<OpenPriceConfig.Models.Configurator>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Enabled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FloorsNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a asp-controller="Options" asp-route-id="@item.ID" asp-action="Index">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enabled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FloorsNumber)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

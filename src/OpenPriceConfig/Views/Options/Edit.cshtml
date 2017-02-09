@@ -1,0 +1,75 @@
+@model OpenPriceConfig.Models.Option
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>Option</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ID" />
+        
+        <div class="form-group">
+            <label asp-for="Order" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Order" class="form-control" />
+                <span asp-validation-for="Order" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="DescriptionLocaleID" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="DescriptionLocaleID" class="form-control" asp-items="ViewBag.DescriptionLocaleID"></select>
+                <span asp-validation-for="DescriptionLocaleID" class="text-danger" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="OptionTag" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="OptionTag" class="form-control" />
+                <span asp-validation-for="OptionTag" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index" asp-route-id="@Model.Configurator.ID">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
