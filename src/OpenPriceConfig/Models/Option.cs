@@ -13,7 +13,9 @@ namespace OpenPriceConfig.Models
             Checkbox = 1,
             Numeric = 2,
             Text = 3,
-            Option = 4
+            Option = 4,
+            HorizontalRule = 5,
+            LineBreak = 6
         }
         public int ID { get; set; }
 
@@ -67,6 +69,26 @@ namespace OpenPriceConfig.Models
                     BracketPricing.Remove(BracketPricing.Last());
                 }
             }
+        }
+
+        public decimal GetPrice(int numberOfFloors)
+        {
+            if (BracketPricing == null || BracketPricing.Count == 0)
+            {
+                return Price;
+            }
+            else
+            {
+                return BracketPricing.Where(b => b.ForFloorNumber == numberOfFloors).Single().Price;
+            }
+        }
+
+        public string GetDescription()
+        {
+            if (DescriptionLocaleID == 1)
+                return Description;
+
+            return DescriptionLocale.Text;
         }
     }
 }

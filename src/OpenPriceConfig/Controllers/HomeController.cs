@@ -26,75 +26,80 @@ namespace OpenPriceConfig.Controllers
         
         public async Task<IActionResult> Index(int? id /*configuratorID*/)
         {
+            Configurator configurator = null;
+            var query = from c in _context.Configurator select c;
+            query = query.Include(c => c.Options);
+            
             if (id == null)
+            {
+                configurator = await query.FirstAsync();
+            }
+            else
+            {
+                configurator = await query.SingleAsync(c => c.ID == id);
+            }
+
+            if(configurator == null)
             {
                 return RedirectToAction(nameof(HomeController.Empty));
             }
-
-            var configurator = await _context.Configurator.Where(c => c.ID == id)
-                .Include(c => c.Options)
-                .SingleAsync();
 
             return View(configurator);
         }
 
         [HttpPost]
-        public async Task<string> GeneratePrice(int? id)
+        public async Task<IActionResult> GeneratePrice(int? id)
         {
             if (id == null)
                 NotFound();
 
             //Gather all form keys and values in a dictionary
-            var dict = new Dictionary<string, object>();
-            var keys = Request.Form.Keys;
-            string output = "";
-            foreach (var key in keys)
-            {
-                dict.Add(key, Request.Form[key]);
-                output += $"{key} = {Request.Form[key]}\n";
-            }
+            var dict = FormRequest2Dict();
+
+            var vm = new OfferViewModel();
 
             var configurator = await _context.Configurator
                 .Where(c => c.ID == id)
-                .Include(c => c.Options)
-                    .ThenInclude(o => o.BracketPricing)
+                .Include(c => c.Options).ThenInclude(o => o.BracketPricing)
+                .Include(c => c.Options).ThenInclude(o => o.DescriptionLocale)
                 .SingleAsync();
 
-            var numberOfFloors = int.Parse(dict["NUMBER_OF_FLOORS"].ToString());
-            decimal price = 0M;
 
-            foreach(var kvp in dict)
+            var numberOfFloors = int.Parse(dict["NUMBER_OF_FLOORS"].ToString());
+
+            foreach (var kvp in dict)
             {
                 decimal itemPrice = 0M;
+                Option option = null;
+
                 if (kvp.Key.StartsWith("ITEM_"))
                 {
                     var inputId = int.Parse(kvp.Key.Replace("ITEM_", ""));
-                    var option = configurator.Options.Where(o => o.ID == inputId).Single();
-                    if(option.BracketPricing == null || option.BracketPricing.Count == 0)
-                    {
-                        itemPrice = option.Price;
-                    }
-                    else
-                    {
-                        itemPrice = option.BracketPricing.Where(b => b.ForFloorNumber == numberOfFloors).Single().Price;
-                    }
-
-                    output += Environment.NewLine + $"{option.Name} : {itemPrice}";
+                    option = configurator.Options.Where(o => o.ID == inputId).Single();
                 }
                 else if(kvp.Key.StartsWith("OPTION_"))
                 {
-
+                    int inputId = int.Parse(kvp.Value.ToString());
+                    option = configurator.Options.Where(o => o.ID == inputId).Single();
                 }
 
-                price += itemPrice;
+                if(option != null)
+                {
+                    string description = option.GetDescription();
+                    itemPrice = option.GetPrice(numberOfFloors);
+
+                    vm.Items.Add(new OfferViewModel.OfferItem() {
+                        Name = option.Name,
+                        Description = option.GetDescription(),
+                        Price = option.GetPrice(numberOfFloors),
+                        TextValue = kvp.Value.ToString()
+                    });
+
+                }
             }
 
-
-            output += Environment.NewLine + $"Price SUM: {price}";
-
-
-            
-            return output;
+            return null;
+            //return ViewPdf(vm, "capris.pdf");
         }
 
 
@@ -102,5 +107,22 @@ namespace OpenPriceConfig.Controllers
         {
             return View();
         }
+
+
+
+        Dictionary<string, object> FormRequest2Dict()
+        {
+            var dict = new Dictionary<string, object>();
+            var keys = Request.Form.Keys;
+            
+            foreach (var key in keys)
+            {
+                dict.Add(key, Request.Form[key]);
+            }
+
+            return dict;
+        }
+
     }
 }
+

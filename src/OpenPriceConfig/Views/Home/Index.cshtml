@@ -2,12 +2,12 @@
 @{
     ViewData["Title"] = "Hisselektronik - Priskonfiguratorn";
     List<string> groupsToIgnore = new List<string>();
+    var options = Model.Options.OrderBy(o => o.Order);
 }
 
 <h2>Hisselektronik - Priskonfigurator</h2>
 <form asp-action="GeneratePrice">
     <div class="form-horizontal">
-        <h4>Hisstyp</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="ID" />
@@ -17,9 +17,17 @@
             <input type="number" class="form-control" id="NUMBER_OF_FLOORS" name="NUMBER_OF_FLOORS" min="2" max="@Model.FloorsNumber" value="2" />
             <span class="text-danger field-validation-valid" data-valmsg-for="NUMBER_OF_FLOORS" data-valmsg-replace="true"></span>
         </div>
+        <hr />
 
-        @foreach (var item in Model.Options)
+        @foreach (var item in options)
         {
+            
+            @if (groupsToIgnore.Contains(item.OptionTag))
+            {
+                continue;
+            }
+            @:<!--@item.InputType-->
+
             switch (item.InputType)
             {
                 case Option.InputTypes.Checkbox:
@@ -34,18 +42,26 @@
                     </div>
                     break;
                 case Option.InputTypes.Option:
-                    
-                    @if (groupsToIgnore.Contains(item.OptionTag))
-                    {
-                        break;
-                    }
                     groupsToIgnore.Add(item.OptionTag);
+                    string checkd = " checked";
                     <div class="form-group">
-                    @foreach (var radioItem in Model.Options)
+                    @foreach (var radioItem in options)
                     {
                         if (radioItem.OptionTag == item.OptionTag)
                         {
-                            <label class="radio-inline"><input type="radio" name="OPTION_@radioItem.OptionTag" value="@radioItem.ID">@radioItem.Name</label>
+                            switch (radioItem.InputType)
+                            {
+                                case Option.InputTypes.Option:
+                                    <label class="radio-inline"><input type="radio" name="OPTION_@radioItem.OptionTag" value="@radioItem.ID" @checkd>@radioItem.Name</label>
+                                    checkd = "";
+                                    break;
+                                case Option.InputTypes.HorizontalRule:
+                                    <hr />
+                                    break;
+                                case Option.InputTypes.LineBreak:
+                                    <br />
+                                    break;
+                            }
                         }
                     }
                     </div>
@@ -56,6 +72,12 @@
                         <label for="ITEM_@item.ID">@item.Name</label>
                         <input type="text" class="form-control" id="ITEM_@item.ID" name="ITEM_@item.ID">
                     </div>
+                    break;
+                case Option.InputTypes.HorizontalRule:
+                    <hr />
+                    break;
+                case Option.InputTypes.LineBreak:
+                    <br />
                     break;
             }
         }

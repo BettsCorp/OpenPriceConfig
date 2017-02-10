@@ -33,7 +33,7 @@
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger" />
             </div>
         </div>
@@ -62,7 +62,7 @@
         <div class="form-group">
             <label asp-for="Price" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Price" class="form-control" />
+                <input asp-for="Price" class="form-control" value="0" />
                 <span asp-validation-for="Price" class="text-danger" />
             </div>
         </div>

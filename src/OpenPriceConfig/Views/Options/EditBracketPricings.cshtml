@@ -8,7 +8,7 @@
 
 <form asp-action="EditBracketPricings" asp-route-id="@Model.ID">
     <div class="form-horizontal">
-        <h4>BracketPricing</h4>
+        <h4>Bracket Pricing - @Model.Name</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         @for (int i = 0; i < Model.BracketPricing.Count; i++)
