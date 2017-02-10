@@ -18,26 +18,22 @@ namespace OpenPriceConfig.Controllers
         {
             _context = context;
         }
+
+        public IActionResult Empty()
+        {
+            return View();
+        }
         
         public async Task<IActionResult> Index(int? id /*configuratorID*/)
         {
-            Configurator configurator = null;
             if (id == null)
             {
-                configurator = await _context.Configurator
-                    .Include(c => c.Options)
-                    .FirstAsync();
+                return RedirectToAction(nameof(HomeController.Empty));
             }
 
-            else
-            {
-                configurator = await _context.Configurator.Where(c => c.ID == id)
-                    .Include(c => c.Options)
-                    .SingleAsync();
-            }
-
-            if (configurator == null)
-                return NotFound();
+            var configurator = await _context.Configurator.Where(c => c.ID == id)
+                .Include(c => c.Options)
+                .SingleAsync();
 
             return View(configurator);
         }
@@ -51,7 +47,7 @@ namespace OpenPriceConfig.Controllers
             foreach (var key in keys)
             {
                 dict.Add(key, Request.Form[key]);
-                output += $"{key} =  {Request.Form[key]}  <br /> \n  ";
+                output += $"{key} = {Request.Form[key]}\n";
             }
 
             

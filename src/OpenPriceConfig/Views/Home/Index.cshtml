@@ -1,6 +1,7 @@
 ﻿@model OpenPriceConfig.Models.Configurator
 @{
     ViewData["Title"] = "Hisselektronik - Priskonfiguratorn";
+    List<string> groupsToIgnore = new List<string>();
 }
 
 <h2>Hisselektronik - Priskonfigurator</h2>
@@ -10,39 +11,55 @@
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="ID" />
+
         <div class="form-group">
-            <label for="NUMBER_OF_FLOORS" class="col-md-2 control-label">Number of floors</label>
-            <div class="col-md-10">
-                <input name="NUMBER_OF_FLOORS" id="NUMBER_OF_FLOORS" type="number" min="2" max="@Model.FloorsNumber" class="form-control" />
-                <span class="text-danger field-validation-valid" data-valmsg-for="NUMBER_OF_FLOORS" data-valmsg-replace="true"></span>
-                @*<span asp-validation-for="Tag" class="text-danger" />*@
-            </div>
+            <label for="NUMBER_OF_FLOORS">Number of floors</label>
+            <input type="number" class="form-control" id="NUMBER_OF_FLOORS" name="NUMBER_OF_FLOORS" min="2" max="@Model.FloorsNumber" value="2" />
+            <span class="text-danger field-validation-valid" data-valmsg-for="NUMBER_OF_FLOORS" data-valmsg-replace="true"></span>
         </div>
 
         @foreach (var item in Model.Options)
         {
-            @:
-            <div class="form-group">
-                <label class="col-md-2 control-label">@item.Name</label>
-                <div class="col-md-10">
-                    @switch (item.InputType)
+            switch (item.InputType)
+            {
+                case Option.InputTypes.Checkbox:
+                    <div class="form-group">
+                        <label><input type="checkbox" name="ITEM_@item.ID" value="true"> @item.Name</label>
+                    </div>
+                    break;
+                case Option.InputTypes.Numeric:
+                    <div class="form-group">
+                        <label for="ITEM_@item.ID">@item.Name</label>
+                        <input type="number" class="form-control" id="ITEM_@item.ID" name="ITEM_@item.ID">
+                    </div>
+                    break;
+                case Option.InputTypes.Option:
+                    
+                    @if (groupsToIgnore.Contains(item.OptionTag))
                     {
-                        case Option.InputTypes.Checkbox:
-                            <input type="checkbox" name="ITEM_@item.ID"/>
-                            break;
-                        case Option.InputTypes.Numeric:
-                            <input type="number" name="ITEM_@item.ID"/>
-                            break;
-                        case Option.InputTypes.Option:
-                            <input type="radio" name="OPTION_@item.OptionTag" value="@item.ID" />
-                            break;
-                        case Option.InputTypes.Text:
-                            <input type="text" name="ITEM_@item.ID"/>
-                            break;
+                        break;
                     }
-                </div>
-            </div>
+                    groupsToIgnore.Add(item.OptionTag);
+                    <div class="form-group">
+                    @foreach (var radioItem in Model.Options)
+                    {
+                        if (radioItem.OptionTag == item.OptionTag)
+                        {
+                            <label class="radio-inline"><input type="radio" name="OPTION_@radioItem.OptionTag" value="@radioItem.ID">@radioItem.Name</label>
+                        }
+                    }
+                    </div>
+
+                    break;
+                case Option.InputTypes.Text:
+                    <div class="form-group">
+                        <label for="ITEM_@item.ID">@item.Name</label>
+                        <input type="text" class="form-control" id="ITEM_@item.ID" name="ITEM_@item.ID">
+                    </div>
+                    break;
+            }
         }
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Generera pris" class="btn btn-default" />
