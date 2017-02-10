@@ -39,8 +39,12 @@ namespace OpenPriceConfig.Controllers
         }
 
         [HttpPost]
-        public async Task<string> GeneratePrice()
+        public async Task<string> GeneratePrice(int? id)
         {
+            if (id == null)
+                NotFound();
+
+            //Gather all form keys and values in a dictionary
             var dict = new Dictionary<string, object>();
             var keys = Request.Form.Keys;
             string output = "";
@@ -50,8 +54,46 @@ namespace OpenPriceConfig.Controllers
                 output += $"{key} = {Request.Form[key]}\n";
             }
 
+            var configurator = await _context.Configurator
+                .Where(c => c.ID == id)
+                .Include(c => c.Options)
+                    .ThenInclude(o => o.BracketPricing)
+                .SingleAsync();
+
+            var numberOfFloors = int.Parse(dict["NUMBER_OF_FLOORS"].ToString());
+            decimal price = 0M;
+
+            foreach(var kvp in dict)
+            {
+                decimal itemPrice = 0M;
+                if (kvp.Key.StartsWith("ITEM_"))
+                {
+                    var inputId = int.Parse(kvp.Key.Replace("ITEM_", ""));
+                    var option = configurator.Options.Where(o => o.ID == inputId).Single();
+                    if(option.BracketPricing == null || option.BracketPricing.Count == 0)
+                    {
+                        itemPrice = option.Price;
+                    }
+                    else
+                    {
+                        itemPrice = option.BracketPricing.Where(b => b.ForFloorNumber == numberOfFloors).Single().Price;
+                    }
+
+                    output += Environment.NewLine + $"{option.Name} : {itemPrice}";
+                }
+                else if(kvp.Key.StartsWith("OPTION_"))
+                {
+
+                }
+
+                price += itemPrice;
+            }
+
+
+            output += Environment.NewLine + $"Price SUM: {price}";
+
+
             
-            await Task.Delay(1);
             return output;
         }
 
