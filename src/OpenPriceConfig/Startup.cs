@@ -54,6 +54,8 @@ namespace OpenPriceConfig
 
             services.AddMvc();
 
+            services.AddSingleton<PdfResultExecutor>();
+
             services.AddAuthorization(options => {
                 options.AddPolicy("AdminRights", p => p.RequireRole("Admin"));
             });
@@ -69,7 +71,7 @@ namespace OpenPriceConfig
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseApplicationInsightsRequestTelemetry();
+            //app.UseApplicationInsightsRequestTelemetry();
 
             if (env.IsDevelopment())
             {
@@ -82,7 +84,7 @@ namespace OpenPriceConfig
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseApplicationInsightsExceptionTelemetry();
+            //app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
 

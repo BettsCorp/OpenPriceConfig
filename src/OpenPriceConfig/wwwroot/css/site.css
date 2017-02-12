@@ -1,20 +1,60 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 0px;
     padding-bottom: 20px;
+    background: url("../images/HES-bbg2.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
+
+.container {
+    background-color: white;
+    width: 95%;
+    max-width: 1000px;
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+.navbar .container {
+    background-color: #5e5e5e;
+}
+
+.navbar-inverse {
+    background-color: transparent;
+    border: none;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: white;
+}
+
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input,
 select,
 textarea {
     max-width: 280px;
+}
+
+pre {
+    background-color: transparent;
+    border: none;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #f36f31;
+    text-transform: uppercase;
 }
 
 /* Carousel */
@@ -47,4 +87,10 @@ textarea {
   .carousel-caption {
     display: none
   }
+}
+
+@media print {
+    .navbar {
+        display : none;
+    }
 }

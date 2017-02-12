@@ -1,0 +1,49 @@
+@model OfferViewModel
+
+@{
+    ViewData["Title"] = "Ca pris";
+}
+
+<h2>Ca pris - @Model.Name</h2>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th><!--Name--></th>
+            <th>Pris (kr)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.Items)
+        {
+            <tr>
+                <td valign="top">
+                    @item.Name
+                    @if(!string.IsNullOrEmpty(item.TextValue))
+                    {
+                        @:: @item.TextValue
+                    }
+                    @if(!string.IsNullOrEmpty(item.Description))
+                    {
+                        <br />
+                        <pre>@item.Description</pre>
+                    }
+                </td>
+                <td valign="top">
+                @if(item.HasPrice)
+                {
+                    @: @item.Price
+                }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Summa:</th>
+            <th>@Model.PriceSum</th>
+        </tr>
+    </tfoot>
+
+</table>

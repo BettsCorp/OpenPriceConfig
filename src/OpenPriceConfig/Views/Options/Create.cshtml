@@ -33,6 +33,7 @@
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label"></label>
             <div class="col-md-10">
+                <pre>@Option.DescriptionInfoText</pre>
                 <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger" />
             </div>
@@ -40,6 +41,7 @@
         <div class="form-group">
             <label asp-for="DescriptionLocaleID" class="col-md-2 control-label"></label>
             <div class="col-md-10">
+                <pre>@Option.DescriptionLocaleInfoText</pre>
                 <select asp-for="DescriptionLocaleID" class ="form-control" asp-items="ViewBag.DescriptionLocaleID"></select>
             </div>
         </div>
@@ -47,6 +49,7 @@
         <div class="form-group">
             <label asp-for="InputType" class="control-label col-md-2"></label>
             <div class="col-md-10">
+                <pre>@Option.InputTypeInfoText</pre>
                 <select asp-for="InputType" class="form-control" asp-items="ViewBag.InputTypeID"></select>
                 <span asp-validation-for="InputType" class="text-danger" />
             </div>
@@ -55,6 +58,7 @@
         <div class="form-group">
             <label asp-for="OptionTag" class="col-md-2 control-label"></label>
             <div class="col-md-10">
+                <pre>@Option.OptionTagInfoText</pre>
                 <input asp-for="OptionTag" class="form-control" />
                 <span asp-validation-for="OptionTag" class="text-danger" />
             </div>

@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using OpenPriceConfig.Data;
 using Microsoft.EntityFrameworkCore;
 using OpenPriceConfig.Models;
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace OpenPriceConfig.Controllers
 {
@@ -64,6 +67,7 @@ namespace OpenPriceConfig.Controllers
                 .Include(c => c.Options).ThenInclude(o => o.DescriptionLocale)
                 .SingleAsync();
 
+            vm.Name = configurator.Name;
 
             var numberOfFloors = int.Parse(dict["NUMBER_OF_FLOORS"].ToString());
 
@@ -92,16 +96,19 @@ namespace OpenPriceConfig.Controllers
                         Name = option.Name,
                         Description = option.GetDescription(),
                         Price = option.GetPrice(numberOfFloors),
-                        TextValue = kvp.Value.ToString()
+                        TextValue = option.InputType == Option.InputTypes.Numeric ||
+                                    option.InputType == Option.InputTypes.Text ? 
+                                    kvp.Value.ToString() : "",
+                        HasPrice =  option.InputType == Option.InputTypes.Checkbox || 
+                                    option.InputType == Option.InputTypes.Option
                     });
 
                 }
             }
 
-            return null;
-            //return ViewPdf(vm, "capris.pdf");
+            return View(vm);
         }
-
+        
 
         public IActionResult Error()
         {

@@ -8,6 +8,8 @@ namespace OpenPriceConfig.Models
     public class OfferViewModel
     {
 
+        public string Name { get; set; }
+
         public List<OfferItem> Items { get; set; } = new List<OfferItem>();
 
         public decimal PriceSum { get { return Items.Sum(i => i.Price); } }
@@ -19,6 +21,7 @@ namespace OpenPriceConfig.Models
             public string Description { get; set; }
             public decimal Price { get; set; }
             public string TextValue { get; set; }
+            public bool HasPrice { get; set; }
         }
 
     }

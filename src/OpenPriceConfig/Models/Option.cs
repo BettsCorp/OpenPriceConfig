@@ -23,11 +23,14 @@ namespace OpenPriceConfig.Models
 
         public string Name { get; set; }
 
+        public const string DescriptionInfoText = "Text is displayed under the name of the item in the genrerated price list.";
         public string Description { get; set; }
 
+        public const string DescriptionLocaleInfoText = "If set, the text in the Description field will be neglected. Instead the text pointed by DescriptionLocaleID will be used.\nThis comes handy when multiple items are to show the same text.";
         public int DescriptionLocaleID { get; set; }
         public Locale DescriptionLocale { get; set; }
 
+        public const string OptionTagInfoText = "If Item type is set top Option, this value is used to group multiple options.\nSet the same (any) Option Tag value to the ones that are grouped";
         public string OptionTag { get; set; }
 
         public decimal Price { get; set; } 
@@ -36,6 +39,7 @@ namespace OpenPriceConfig.Models
 
         public Configurator Configurator { get; set; }
 
+        public const string InputTypeInfoText = "Checkbox: The item can be independently be selected\nNumeric: Input value is a number\nText: Input value is a text\nOption: One of multiple values are selected (refer to OptionTag)\nHorizontalRule: Not an input, but a line to divide items\nLineBreak: Not an input. Just line break";
         public InputTypes InputType { get; set; }
 
         public void GenerateBracketPricings(int numberOfFloors)

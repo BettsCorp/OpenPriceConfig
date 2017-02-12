@@ -13,7 +13,7 @@
         <input type="hidden" asp-for="ID" />
 
         <div class="form-group">
-            <label for="NUMBER_OF_FLOORS">Number of floors</label>
+            <label for="NUMBER_OF_FLOORS">Antal våningar</label>
             <input type="number" class="form-control" id="NUMBER_OF_FLOORS" name="NUMBER_OF_FLOORS" min="2" max="@Model.FloorsNumber" value="2" />
             <span class="text-danger field-validation-valid" data-valmsg-for="NUMBER_OF_FLOORS" data-valmsg-replace="true"></span>
         </div>
@@ -38,7 +38,7 @@
                 case Option.InputTypes.Numeric:
                     <div class="form-group">
                         <label for="ITEM_@item.ID">@item.Name</label>
-                        <input type="number" class="form-control" id="ITEM_@item.ID" name="ITEM_@item.ID">
+                        <input type="text" class="form-control" id="ITEM_@item.ID" name="ITEM_@item.ID">
                     </div>
                     break;
                 case Option.InputTypes.Option:
