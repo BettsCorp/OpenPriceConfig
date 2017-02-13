@@ -50,6 +50,10 @@ pre {
     background-color: transparent;
     border: none;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
 }
 
 h1, h2, h3, h4, h5, h6 {

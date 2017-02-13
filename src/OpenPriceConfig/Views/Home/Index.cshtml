@@ -3,6 +3,7 @@
     ViewData["Title"] = "Hisselektronik - Priskonfiguratorn";
     List<string> groupsToIgnore = new List<string>();
     var options = Model.Options.OrderBy(o => o.Order);
+
 }
 
 <h2>Hisselektronik - Priskonfigurator</h2>
@@ -43,27 +44,28 @@
                     break;
                 case Option.InputTypes.Option:
                     groupsToIgnore.Add(item.OptionTag);
-                    string checkd = " checked";
-                    <div class="form-group">
-                    @foreach (var radioItem in options)
-                    {
-                        if (radioItem.OptionTag == item.OptionTag)
-                        {
-                            switch (radioItem.InputType)
-                            {
-                                case Option.InputTypes.Option:
-                                    <label class="radio-inline"><input type="radio" name="OPTION_@radioItem.OptionTag" value="@radioItem.ID" @checkd>@radioItem.Name</label>
-                                    checkd = "";
-                                    break;
-                                case Option.InputTypes.HorizontalRule:
-                                    <hr />
-                                    break;
-                                case Option.InputTypes.LineBreak:
-                                    <br />
-                                    break;
-                            }
-                        }
+                    if (string.IsNullOrEmpty(item.OptionTag)) {
+                        break;
                     }
+                    var title = item.OptionTag.Replace('_', ' ').ToLower();
+
+                    char[] a = title.ToCharArray();
+                    a[0] = char.ToUpper(a[0]);
+                    title = new string(a);
+
+                    <div class="form-group">
+                        <label for="OPTION_@item.OptionTag">@title</label>
+                        <select name="OPTION_@item.OptionTag" class="form-control">
+
+                            @foreach (var radioItem in options)
+                            {
+                                if (radioItem.InputType== Option.InputTypes.Option && radioItem.OptionTag == item.OptionTag)
+                                {
+                                    <option value="@radioItem.ID">@radioItem.Name</option>
+                                }
+                            }
+                        </select>
+
                     </div>
 
                     break;

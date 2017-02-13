@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OpenPriceConfig.Data;
 using OpenPriceConfig.Models;
 using OpenPriceConfig.Services;
@@ -63,6 +66,24 @@ namespace OpenPriceConfig
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.Configure<RequestLocalizationOptions>(options => {
+
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en-us"),
+                    new CultureInfo("en"),
+                };
+
+                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(supportedCultures[0]);
+
+                // You must explicitly state which cultures your application supports.
+                // These are the cultures the app supports for formatting numbers, dates, etc.
+                options.SupportedCultures = supportedCultures;
+
+                // These are the cultures the app supports for UI strings, i.e. we have localized resources for.
+                options.SupportedUICultures = supportedCultures;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,6 +112,10 @@ namespace OpenPriceConfig
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
+
+            var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(locOptions.Value);
+      
 
             app.UseMvc(routes =>
             {
