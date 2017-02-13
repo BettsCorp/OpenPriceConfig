@@ -92,16 +92,22 @@ namespace OpenPriceConfig.Controllers
                     string description = option.GetDescription();
                     itemPrice = option.GetPrice(numberOfFloors);
 
-                    vm.Items.Add(new OfferViewModel.OfferItem() {
+                    var oi = new OfferViewModel.OfferItem()
+                    {
                         Name = option.Name,
                         Description = option.GetDescription(),
                         Price = option.GetPrice(numberOfFloors),
                         TextValue = option.InputType == Option.InputTypes.Numeric ||
-                                    option.InputType == Option.InputTypes.Text ? 
+                                    option.InputType == Option.InputTypes.Text ?
                                     kvp.Value.ToString() : "",
-                        HasPrice =  option.InputType == Option.InputTypes.Checkbox || 
+                        HasPrice = option.InputType == Option.InputTypes.Checkbox ||
                                     option.InputType == Option.InputTypes.Option
-                    });
+                    };
+
+                    if (oi.HasPrice && oi.Price == 0M)
+                        continue;
+
+                    vm.Items.Add(oi);
 
                 }
             }
