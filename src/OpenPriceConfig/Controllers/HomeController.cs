@@ -70,10 +70,10 @@ namespace OpenPriceConfig.Controllers
             vm.Name = configurator.Name;
 
             var numberOfFloors = int.Parse(dict["NUMBER_OF_FLOORS"].ToString());
+            var numberOfWires = int.Parse(dict["NUMBER_OF_WIRES"].ToString());
 
             foreach (var kvp in dict)
             {
-                decimal itemPrice = 0M;
                 Option option = null;
 
                 if (kvp.Key.StartsWith("ITEM_"))
@@ -89,14 +89,12 @@ namespace OpenPriceConfig.Controllers
 
                 if(option != null)
                 {
-                    string description = option.GetDescription();
-                    itemPrice = option.GetPrice(numberOfFloors);
-
                     var oi = new OfferViewModel.OfferItem()
                     {
+
                         Name = option.Name,
-                        Description = option.GetDescription(),
-                        Price = option.GetPrice(numberOfFloors),
+                        Description = option.DescriptionLocale.Text,
+                        Price = option.GetPrice(numberOfFloors, numberOfWires),
                         TextValue = option.InputType == Option.InputTypes.Numeric ||
                                     option.InputType == Option.InputTypes.Text ?
                                     kvp.Value.ToString() : "",

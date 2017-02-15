@@ -11,6 +11,7 @@ namespace OpenPriceConfig.Models
         public int ID { get; set; }
 
         public int ForFloorNumber { get; set; }
+        public int Level { get; set; }
 
         public decimal Price { get; set; }
 

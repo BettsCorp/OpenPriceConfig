@@ -43,23 +43,6 @@ namespace OpenPriceConfig.Controllers
             return View(await optionsq.ToListAsync());
         }
 
-        // GET: Options/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var option = await _context.Option.SingleOrDefaultAsync(m => m.ID == id);
-            if (option == null)
-            {
-                return NotFound();
-            }
-
-            return View(option);
-        }
-
         // GET: Options/Create
         public async Task<IActionResult> Create(int? id/*configurator id*/)
         {
@@ -72,6 +55,7 @@ namespace OpenPriceConfig.Controllers
             ViewData["ConfiguratorID"] = new SelectList(_context.Configurator, "ID", "Name");
             ViewData["DescriptionLocaleID"] = new SelectList(_context.Locale, "ID", "Tag");
             PopulateInputTypeDropDownList(null);
+            PopulateBracketPricingTypeDropDownList(null);
             return View();
         }
 
@@ -80,7 +64,7 @@ namespace OpenPriceConfig.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int? id/*Configurator ID*/, [Bind("Description,DescriptionLocaleID,Name,OptionTag,Order,Price,InputType")] Option option)
+        public async Task<IActionResult> Create(int? id/*Configurator ID*/, [Bind("DescriptionLocaleID,Name,OptionTag,Order,Price,InputType,BracketPricingType")] Option option)
         {
             if (ModelState.IsValid)
             {
@@ -93,10 +77,11 @@ namespace OpenPriceConfig.Controllers
 
                 var configurator = await configuratorQuery.FirstOrDefaultAsync();
                 option.Configurator = configurator;
-
+                option.UpdateBracketPricings();
                 _context.Add(option);
                 //option.GenerateBracketPricings(configurator.FloorsNumber);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction("Index", new { id = configurator.ID });
             }
             ViewData["DescriptionLocaleID"] = new SelectList(_context.Locale, "ID", "ID", option.DescriptionLocaleID);
@@ -122,6 +107,7 @@ namespace OpenPriceConfig.Controllers
 
 
             PopulateInputTypeDropDownList(option);
+            PopulateBracketPricingTypeDropDownList(option);
 
             ViewData["DescriptionLocaleID"] = new SelectList(_context.Locale, "ID", "Tag", option.DescriptionLocaleID);
             
@@ -133,7 +119,7 @@ namespace OpenPriceConfig.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Description,DescriptionLocaleID,Name,OptionTag,Order,Price,InputType")] Option option)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,DescriptionLocaleID,Name,OptionTag,Order,Price,InputType,BracketPricingType")] Option option)
         {
             if (id != option.ID)
             {
@@ -146,9 +132,14 @@ namespace OpenPriceConfig.Controllers
                                           where o.ID == option.ID
                                           select o.Configurator).FirstAsync();
 
-
                 try
                 {
+                    _context.Update(option);
+                    await _context.SaveChangesAsync();
+
+                    option = await _context.Option.Include(o => o.Configurator).Include(o => o.BracketPricing).SingleAsync(o => o.ID == id);
+                    option.UpdateBracketPricings();
+                    //Need to call again so bracket pricings are updated
                     _context.Update(option);
                     await _context.SaveChangesAsync();
                 }
@@ -193,27 +184,10 @@ namespace OpenPriceConfig.Controllers
         {
             var option = await _context.Option.Include(o => o.Configurator).SingleOrDefaultAsync(m => m.ID == id);
             var configurator = option.Configurator;
-            await ClearPricings(id);
+            option.UpdateBracketPricings();
             _context.Option.Remove(option);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", new { id = configurator.ID });
-        }
-
-        public async Task<IActionResult> ClearPricings(int? id /*optionID*/)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var option = await _context.Option
-                .Include(o => o.Configurator)
-                .Include(o => o.BracketPricing)
-                .SingleAsync(m => m.ID == id);
-
-            _context.BracketPricing.RemoveRange(option.BracketPricing);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", new { id = option.Configurator.ID });
         }
 
         // GET: BracketPricings/Edit/5
@@ -229,12 +203,12 @@ namespace OpenPriceConfig.Controllers
                 .Include(o => o.Configurator)
                 .FirstAsync();
 
-            var bracketPricing = await _context.BracketPricing.Where(b => b.OptionID == id).OrderBy(b => b.ForFloorNumber).ToListAsync();
+            var bracketPricing = await _context.BracketPricing.Where(b => b.OptionID == id).OrderBy(b => b.Level).ToListAsync();
 
             //Generate a list of bracket pricing if not existing
             if (bracketPricing == null || bracketPricing.Count == 0)
             {
-                option.GenerateBracketPricings(option.Configurator.FloorsNumber);
+                option.UpdateBracketPricings();
                 _context.Update(option);
                 await _context.SaveChangesAsync();
             }
@@ -286,6 +260,18 @@ namespace OpenPriceConfig.Controllers
             }
             ViewData["InputTypeID"] = new SelectList(inputTypes, "Value", "Name", option?.InputType);
         }
-        
+
+        void PopulateBracketPricingTypeDropDownList(Option option)
+        {
+            List<object> inputTypes = new List<object>() { };
+            var bracketPricingTypesNames = Enum.GetNames(typeof(Option.BracketPricingTypes));
+            var bracketPricingTypesValues = Enum.GetValues(typeof(Option.BracketPricingTypes));
+            for (int i = 0; i < bracketPricingTypesNames.Length; i++)
+            {
+                inputTypes.Add(new { Value = bracketPricingTypesValues.GetValue(i), Name = bracketPricingTypesNames[i] });
+            }
+            ViewData["BracketPricingTypeID"] = new SelectList(inputTypes, "Value", "Name", option?.InputType);
+        }
+
     }
 }

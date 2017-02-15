@@ -19,9 +19,6 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.DescriptionLocaleID)
             </th>
             <th>
@@ -30,23 +27,21 @@
             <th width="90">
                 @Html.DisplayNameFor(model => model.InputType)
             </th>
-            <th width="90">
+            <th width="200">
                 @Html.DisplayNameFor(model => model.Price)
             </th>
             <th width="100"></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Order)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DescriptionLocale.Tag)
@@ -58,18 +53,15 @@
                 @Html.DisplayFor(modelItem => item.InputType)
             </td>
             <td>
+                @if (item.BracketPricingType == Option.BracketPricingTypes.SinglePrice)
+                {
+                    @Html.DisplayFor(modelItem => item.Price)
+                }
                 <a asp-action="EditBracketPricings" asp-route-id="@item.ID">
-                    @if (item.BracketPricing != null && item.BracketPricing.Count != 0)
+                    @{ var orderedBp = item.BracketPricing.OrderBy(b => b.Level);}
+                    @foreach (var bp in orderedBp)
                     {
-                        @foreach (var bp in item.BracketPricing)
-                        {
-                            @bp.Price
-                            @:<br />
-                        }
-                    }
-                    else
-                    {
-                        @Html.DisplayFor(modelItem => item.Price)
+                        @bp.Price @:| 
                     }
                 </a>
             </td>

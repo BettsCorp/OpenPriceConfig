@@ -7,8 +7,8 @@
 -debug:full
 -nostdlib
 -nologo
-"C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\obj\Debug\netcoreapp1.1\dotnet-compile.assemblyinfo.cs"
--out:"C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\bin\Debug\netcoreapp1.1\OpenPriceConfig.dll"
+"C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\bin\src\OpenPriceConfig\obj\Debug\netcoreapp1.1\dotnet-compile.assemblyinfo.cs"
+-out:"C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\bin\src\OpenPriceConfig\bin\Debug\netcoreapp1.1\OpenPriceConfig.dll"
 -r:"C:\Users\Anders\.nuget\packages\iTextSharp\5.5.10\lib\itextsharp.dll"
 -r:"C:\Users\Anders\.nuget\packages\itextsharp.xmlworker\5.5.10\lib\itextsharp.xmlworker.dll"
 -r:"C:\Users\Anders\.nuget\packages\Microsoft.ApplicationInsights\2.2.0\lib\netstandard1.5\Microsoft.ApplicationInsights.dll"
@@ -242,7 +242,7 @@
 -r:"C:\Users\Anders\.nuget\packages\System.Threading.Timer\4.3.0\ref\netstandard1.2\System.Threading.Timer.dll"
 -r:"C:\Users\Anders\.nuget\packages\System.Xml.ReaderWriter\4.3.0\ref\netstandard1.3\System.Xml.ReaderWriter.dll"
 -r:"C:\Users\Anders\.nuget\packages\System.Xml.XDocument\4.3.0\ref\netstandard1.3\System.Xml.XDocument.dll"
--resource:"C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\obj\Debug\netcoreapp1.1\OpenPriceConfigdotnet-compile.deps.json",OpenPriceConfig.deps.json
+-resource:"C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\bin\src\OpenPriceConfig\obj\Debug\netcoreapp1.1\OpenPriceConfigdotnet-compile.deps.json",OpenPriceConfig.deps.json
 "C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\Constants.cs"
 "C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\Program.cs"
 "C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\Startup.cs"
