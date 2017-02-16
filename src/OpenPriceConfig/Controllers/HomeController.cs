@@ -82,6 +82,19 @@ namespace OpenPriceConfig.Controllers
             var numberOfFloors = int.Parse(dict["NUMBER_OF_FLOORS"].ToString());
             var numberOfWires = int.Parse(dict["NUMBER_OF_WIRES"].ToString());
 
+            vm.Items.Add(new OfferViewModel.OfferItem() {
+                HasPrice = false,
+                Name = "Antal våningar",
+                TextValue = numberOfFloors.ToString()
+            });
+
+            vm.Items.Add(new OfferViewModel.OfferItem()
+            {
+                HasPrice = false,
+                Name = "Antal vajrar",
+                TextValue = numberOfWires.ToString()
+            });
+
             foreach (var kvp in dict)
             {
                 Option option = null;

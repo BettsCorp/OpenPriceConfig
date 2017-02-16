@@ -20,8 +20,6 @@ namespace OpenPriceConfig.Models
                 await InitializeRoles(context, serviceProvider);
                 await InitializeUsers(context, serviceProvider);
                 await InitializeLocale(context, serviceProvider);
-
-                await FixBracketPricings(context, serviceProvider);
             }
 
         }
@@ -83,23 +81,5 @@ namespace OpenPriceConfig.Models
             await context.SaveChangesAsync();
         }
 
-        /// <summary>
-        /// Temporary fix for moving (obsolete)ForFloorNumber to new parameter Level
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="serviceProvider"></param>
-        /// <returns></returns>
-        static async Task FixBracketPricings(ApplicationDbContext context, IServiceProvider serviceProvider)
-        {
-            var bracketPricings = await context.BracketPricing.ToListAsync();
-
-            foreach(var bp in bracketPricings)
-            {
-                bp.Level = bp.ForFloorNumber;
-                context.Update(bp);
-            }
-
-            await context.SaveChangesAsync();
-        }
     }
 }
