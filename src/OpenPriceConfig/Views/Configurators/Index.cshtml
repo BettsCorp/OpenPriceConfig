@@ -21,6 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.FloorsNumber)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WiresNumber)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -37,6 +40,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FloorsNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WiresNumber)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>

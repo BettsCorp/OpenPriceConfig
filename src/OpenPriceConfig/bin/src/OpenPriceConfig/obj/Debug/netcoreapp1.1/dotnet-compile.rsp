@@ -1,5 +1,5 @@
---temp-output:C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\obj\Debug\netcoreapp1.1\
---out:C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\bin\Debug\netcoreapp1.1\OpenPriceConfig.dll
+--temp-output:C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\bin\src\OpenPriceConfig\obj\Debug\netcoreapp1.1\
+--out:C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\bin\src\OpenPriceConfig\bin\Debug\netcoreapp1.1\OpenPriceConfig.dll
 --define:DEBUG
 --define:TRACE
 --define:NETCOREAPP1_1
@@ -246,7 +246,7 @@
 --reference:C:\Users\Anders\.nuget\packages\System.Threading.Timer\4.3.0\ref\netstandard1.2\System.Threading.Timer.dll
 --reference:C:\Users\Anders\.nuget\packages\System.Xml.ReaderWriter\4.3.0\ref\netstandard1.3\System.Xml.ReaderWriter.dll
 --reference:C:\Users\Anders\.nuget\packages\System.Xml.XDocument\4.3.0\ref\netstandard1.3\System.Xml.XDocument.dll
---resource:"C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\obj\Debug\netcoreapp1.1\OpenPriceConfigdotnet-compile.deps.json",OpenPriceConfig.deps.json
+--resource:"C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\bin\src\OpenPriceConfig\obj\Debug\netcoreapp1.1\OpenPriceConfigdotnet-compile.deps.json",OpenPriceConfig.deps.json
 C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\Constants.cs
 C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\Program.cs
 C:\Users\Anders\Documents\Visual Studio 2015\Projects\OpenPriceConfig\src\OpenPriceConfig\Startup.cs

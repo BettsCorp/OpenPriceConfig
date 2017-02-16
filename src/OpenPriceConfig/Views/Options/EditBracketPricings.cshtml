@@ -14,7 +14,7 @@
         @for (int i = 0; i < Model.BracketPricing.Count; i++)
         {
             <div class="form-group">
-                <label asp-for="BracketPricing[i].Price" class="col-md-2 control-label">Floors @Model.BracketPricing[i].ForFloorNumber price</label>
+                <label asp-for="BracketPricing[i].Price" class="col-md-2 control-label">@Model.BracketPricing[i].Level price</label>
                 <div class="col-md-10">
                     <input asp-for="BracketPricing[i].Price" class="form-control" />
                     <span asp-validation-for="BracketPricing[i].Price" class="text-danger" />
@@ -31,8 +31,7 @@
 </form>
 
 <div>
-    <a asp-action="Index" asp-route-id="@Model.Configurator.ID">Back to Option</a> | 
-    <a asp-action="ClearPricings" asp-route-id="@Model.ID">Clear bracket pricing</a>
+    <a asp-action="Index" asp-route-id="@Model.Configurator.ID">Back to Option</a> 
 </div>
 
 @section Scripts {

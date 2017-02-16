@@ -27,23 +27,6 @@ namespace OpenPriceConfig.Controllers
             return View(await _context.Configurator.ToListAsync());
         }
 
-        // GET: Configurators/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var configurator = await _context.Configurator.SingleOrDefaultAsync(m => m.ID == id);
-            if (configurator == null)
-            {
-                return NotFound();
-            }
-
-            return View(configurator);
-        }
-
         // GET: Configurators/Create
         public IActionResult Create()
         {
@@ -55,7 +38,7 @@ namespace OpenPriceConfig.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Enabled,FloorsNumber,Name")] Configurator configurator)
+        public async Task<IActionResult> Create([Bind("ID,Enabled,FloorsNumber,Name,WiresNumber")] Configurator configurator)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +70,7 @@ namespace OpenPriceConfig.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Enabled,FloorsNumber,Name")] Configurator configurator)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Enabled,FloorsNumber,Name,WiresNumber")] Configurator configurator)
         {
             if (id != configurator.ID)
             {
@@ -103,7 +86,8 @@ namespace OpenPriceConfig.Controllers
                     var options = await _context.Option.Include(o => o.BracketPricing).ToListAsync();
                     foreach (var option in options)
                     {
-                        option.UpdateBracketPricings(configurator.FloorsNumber);
+                        option.Configurator = configurator;
+                        option.UpdateBracketPricings();
                         _context.Update(option);
                     }
 

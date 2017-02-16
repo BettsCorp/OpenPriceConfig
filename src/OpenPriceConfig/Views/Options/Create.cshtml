@@ -27,21 +27,9 @@
                 <span asp-validation-for="Name" class="text-danger" />
             </div>
         </div>
-
-        @*<input type="hidden" asp-for="Configurator" value="@ViewBag.Configurator.ID" />*@
-
-        <div class="form-group">
-            <label asp-for="Description" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <pre>@Option.DescriptionInfoText</pre>
-                <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger" />
-            </div>
-        </div>
         <div class="form-group">
             <label asp-for="DescriptionLocaleID" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <pre>@Option.DescriptionLocaleInfoText</pre>
                 <select asp-for="DescriptionLocaleID" class ="form-control" asp-items="ViewBag.DescriptionLocaleID"></select>
             </div>
         </div>
@@ -55,6 +43,14 @@
             </div>
         </div>
         
+        <div class="form-group">
+            <label asp-for="BracketPricingType" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="BracketPricingType" class="form-control" asp-items="ViewBag.BracketPricingTypeID"></select>
+                <span asp-validation-for="BracketPricingType" class="text-danger" />
+            </div>
+        </div>
+
         <div class="form-group">
             <label asp-for="OptionTag" class="col-md-2 control-label"></label>
             <div class="col-md-10">
