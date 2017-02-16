@@ -32,20 +32,30 @@ namespace OpenPriceConfig.Controllers
             Configurator configurator = null;
             var query = from c in _context.Configurator select c;
             query = query.Include(c => c.Options);
-            
-            if (id == null)
+
+            try
             {
                 configurator = await query.FirstAsync();
+                //configurator = await query.SingleAsync(c => c.ID == id);
             }
-            else
-            {
-                configurator = await query.SingleAsync(c => c.ID == id);
-            }
-
-            if(configurator == null)
+            catch
             {
                 return RedirectToAction(nameof(HomeController.Empty));
             }
+
+            //if (id == null)
+            //{
+            //    configurator = await query.FirstAsync();
+            //}
+            //else
+            //{
+            //    configurator = await query.SingleAsync(c => c.ID == id);
+            //}
+
+            //if(configurator == null)
+            //{
+            //    return RedirectToAction(nameof(HomeController.Empty));
+            //}
 
             return View(configurator);
         }
