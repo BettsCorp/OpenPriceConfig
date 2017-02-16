@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using OpenPriceConfig.Data;
 using OpenPriceConfig.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Globalization;
 
 namespace OpenPriceConfig.Controllers
 {
@@ -237,6 +238,55 @@ namespace OpenPriceConfig.Controllers
             {
                 option.BracketPricing[i].Price = bpList[i].Price;
                 _context.Update(option.BracketPricing[i]);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", new { id = option.Configurator.ID });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ParseBracketPricingString(int? id, string inputText)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            char[] validchars = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ',' };
+
+            var inputSplit = inputText.Split('\t');
+            List<decimal> decimals = new List<decimal>();
+            foreach(var inp in inputSplit)
+            {
+                var chararr = inp.Where(c => validchars.Contains(c)).ToArray();
+                var str = new string(chararr).Replace(',', '.');
+                decimal dec;
+                var ok = decimal.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out dec);
+
+                if (string.IsNullOrEmpty(str) || !ok)
+                    continue;
+
+                decimals.Add(dec);
+            }
+
+            var option = await _context.Option
+                .Where(o => o.ID == id)
+                .Include(o => o.Configurator)
+                .Include(o => o.BracketPricing)
+                .FirstAsync();
+
+            if(option.BracketPricing.Count != decimals.Count)
+            {
+                return BadRequest();
+            }
+
+            var orderedBp = option.BracketPricing.OrderBy(o => o.Level).ToArray();
+            for(int i = 0; i < decimals.Count; i++ )
+            {
+                orderedBp[i].Price = decimals[i];
+                _context.Update(orderedBp[i]);
             }
 
             await _context.SaveChangesAsync();

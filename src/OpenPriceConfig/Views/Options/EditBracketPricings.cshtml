@@ -30,6 +30,27 @@
     </div>
 </form>
 
+<form asp-action="ParseBracketPricingString" asp-route-id="@Model.ID">
+    <div class="form-horizontal">
+        <h4>String parser</h4>
+        <p>Input a copy of an excel row. Like :47 950,50 kr  49 085,50 kr  50 187,50 kr  51 153,50 kr  52 255,50 kr  53 394,50 kr  54 538,50 kr</p>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label for="inputText" class="col-md-2 control-label">Excel row</label>
+            <div class="col-md-10">
+                <input id="inputText" name="inputText" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
 <div>
     <a asp-action="Index" asp-route-id="@Model.Configurator.ID">Back to Option</a> 
 </div>
