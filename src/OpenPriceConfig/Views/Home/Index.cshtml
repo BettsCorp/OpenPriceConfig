@@ -13,10 +13,22 @@
         Order = 910,
         Name = "Antal linor"
     });
+
+
+
     Model.Options.Add(new Option() { Order = 920, InputType = Option.InputTypes.HorizontalRule });
+
+    Model.Options.Add(new Option() { Order = 20000, InputType = Option.InputTypes.HorizontalRule });
+
+    Model.Options.Add(new Option()
+    {
+        Order = 20001,
+        Name = "Rabatt"
+    });
+
+
+
     var options = Model.Options.OrderBy(o => o.Order);
-
-
 
 }
 
@@ -46,14 +58,21 @@
                     <span class="text-danger field-validation-valid" data-valmsg-for="NUMBER_OF_WIRES" data-valmsg-replace="true"></span>
                 </div>
             }
+            else if (item.Order == 20001)
+            {
+                <div class="form-group">
+                    <label for="DISCOUNT">Rabatt (%)</label>
+                    <input type="number" class="form-control" id="DISCOUNT" name="DISCOUNT" min="0" max="100" value="0" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="DISCOUNT" data-valmsg-replace="true"></span>
+                </div>
+            }
             else
             {
-
-            @if (groupsToIgnore.Contains(item.OptionTag))
-            {
-                continue;
-            }
-            @:<!--@item.InputType-->
+                @if (groupsToIgnore.Contains(item.OptionTag))
+                {
+                    continue;
+                }
+                @:<!--@item.InputType-->
 
                 switch (item.InputType)
                 {

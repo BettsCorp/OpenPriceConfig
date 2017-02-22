@@ -68,6 +68,9 @@ namespace OpenPriceConfig.Controllers
 
             var numberOfFloors = int.Parse(dict["NUMBER_OF_FLOORS"].ToString());
             var numberOfWires = int.Parse(dict["NUMBER_OF_WIRES"].ToString());
+            var discount = int.Parse(dict["DISCOUNT"].ToString());
+
+            vm.Discount = discount;
 
             foreach (var kvp in dict)
             {

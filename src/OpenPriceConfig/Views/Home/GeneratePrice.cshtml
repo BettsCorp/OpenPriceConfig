@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Ca pris";
+    var discountSum = Model.PriceSum * (decimal)(((decimal)100 - (decimal)Model.Discount) / (decimal)100);
 }
 
 <h2>Ca pris - @Model.Name</h2>
@@ -44,5 +45,13 @@
             <th>Summa:</th>
             <th>@Model.PriceSum</th>
         </tr>
+        @if (Model.Discount != 0)
+        {
+        
+        <tr>
+            <th>Rabatterad summa (@Model.Discount%):</th>
+            <th>@discountSum</th>
+        </tr>
+        }
     </tfoot>
 </table>
