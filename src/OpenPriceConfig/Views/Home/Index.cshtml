@@ -2,7 +2,21 @@
 @{
     ViewData["Title"] = "Hisselektronik - Priskonfiguratorn";
     List<string> groupsToIgnore = new List<string>();
+
+    Model.Options.Add(new Option() { Order = 900, InputType = Option.InputTypes.HorizontalRule });
+    Model.Options.Add(new Option() {
+        Order = 901,
+        Name = "Antal våningar"
+    });
+    Model.Options.Add(new Option()
+    {
+        Order = 910,
+        Name = "Antal linor"
+    });
+    Model.Options.Add(new Option() { Order = 920, InputType = Option.InputTypes.HorizontalRule });
     var options = Model.Options.OrderBy(o => o.Order);
+
+
 
 }
 
@@ -13,52 +27,58 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="ID" />
 
-        <div class="form-group">
-            <label for="NUMBER_OF_FLOORS">Antal våningar</label>
-            <input type="number" class="form-control" id="NUMBER_OF_FLOORS" name="NUMBER_OF_FLOORS" min="2" max="@Model.FloorsNumber" value="2" />
-            <span class="text-danger field-validation-valid" data-valmsg-for="NUMBER_OF_FLOORS" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="NUMBER_OF_WIRES">Antal vajrar</label>
-            <input type="number" class="form-control" id="NUMBER_OF_WIRES" name="NUMBER_OF_WIRES" min="1" max="@Model.WiresNumber" value="1" />
-            <span class="text-danger field-validation-valid" data-valmsg-for="NUMBER_OF_WIRES" data-valmsg-replace="true"></span>
-        </div>
-
-        <hr />
-
         @foreach (var item in options)
         {
-            
+
+            if (item.Order == 901)
+            {
+                <div class="form-group">
+                    <label for="NUMBER_OF_FLOORS">Antal våningar</label>
+                    <input type="number" class="form-control" id="NUMBER_OF_FLOORS" name="NUMBER_OF_FLOORS" min="2" max="@Model.FloorsNumber" value="2" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="NUMBER_OF_FLOORS" data-valmsg-replace="true"></span>
+                </div>
+            }
+            else if (item.Order == 910)
+            {
+                <div class="form-group">
+                    <label for="NUMBER_OF_WIRES">Antal linor</label>
+                    <input type="number" class="form-control" id="NUMBER_OF_WIRES" name="NUMBER_OF_WIRES" min="1" max="@Model.WiresNumber" value="1" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="NUMBER_OF_WIRES" data-valmsg-replace="true"></span>
+                </div>
+            }
+            else
+            {
+
             @if (groupsToIgnore.Contains(item.OptionTag))
             {
                 continue;
             }
             @:<!--@item.InputType-->
 
-            switch (item.InputType)
-            {
-                case Option.InputTypes.Checkbox:
+                switch (item.InputType)
+                {
+                    case Option.InputTypes.Checkbox:
                     <div class="form-group">
                         <label><input type="checkbox" name="ITEM_@item.ID" value="true"> @item.Name</label>
                     </div>
-                    break;
-                case Option.InputTypes.Numeric:
+                        break;
+                    case Option.InputTypes.Numeric:
                     <div class="form-group">
                         <label for="ITEM_@item.ID">@item.Name</label>
                         <input type="text" class="form-control" id="ITEM_@item.ID" name="ITEM_@item.ID">
                     </div>
-                    break;
-                case Option.InputTypes.Option:
-                    groupsToIgnore.Add(item.OptionTag);
-                    if (string.IsNullOrEmpty(item.OptionTag)) {
                         break;
-                    }
-                    var title = item.OptionTag.Replace('_', ' ').ToLower();
+                    case Option.InputTypes.Option:
+                        groupsToIgnore.Add(item.OptionTag);
+                        if (string.IsNullOrEmpty(item.OptionTag))
+                        {
+                            break;
+                        }
+                        var title = item.OptionTag.Replace('_', ' ').ToLower();
 
-                    char[] a = title.ToCharArray();
-                    a[0] = char.ToUpper(a[0]);
-                    title = new string(a);
+                        char[] a = title.ToCharArray();
+                        a[0] = char.ToUpper(a[0]);
+                        title = new string(a);
 
                     <div class="form-group">
                         <label for="OPTION_@item.OptionTag">@title</label>
@@ -66,7 +86,7 @@
 
                             @foreach (var radioItem in options)
                             {
-                                if (radioItem.InputType== Option.InputTypes.Option && radioItem.OptionTag == item.OptionTag)
+                                if (radioItem.InputType == Option.InputTypes.Option && radioItem.OptionTag == item.OptionTag)
                                 {
                                     <option value="@radioItem.ID">@radioItem.Name</option>
                                 }
@@ -75,19 +95,20 @@
 
                     </div>
 
-                    break;
-                case Option.InputTypes.Text:
+                        break;
+                    case Option.InputTypes.Text:
                     <div class="form-group">
                         <label for="ITEM_@item.ID">@item.Name</label>
                         <input type="text" class="form-control" id="ITEM_@item.ID" name="ITEM_@item.ID">
                     </div>
-                    break;
-                case Option.InputTypes.HorizontalRule:
+                        break;
+                    case Option.InputTypes.HorizontalRule:
                     <hr />
-                    break;
-                case Option.InputTypes.LineBreak:
+                        break;
+                    case Option.InputTypes.LineBreak:
                     <br />
-                    break;
+                        break;
+                }
             }
         }
 
@@ -99,4 +120,4 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        }
+}
