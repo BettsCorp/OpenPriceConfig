@@ -73,7 +73,7 @@ namespace OpenPriceConfig.Models
             {
                 //Remove bracket pricings
                 for(int i = BracketPricing.Last().Level; i > levels; i--)
-                 {
+                {
                     BracketPricing.Remove(BracketPricing.Last());
                 }
             }
