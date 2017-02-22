@@ -276,6 +276,7 @@ E:\VSProjects\OpenPriceConfig\src\OpenPriceConfig\Data\Migrations\ApplicationDbC
 E:\VSProjects\OpenPriceConfig\src\OpenPriceConfig\Models\ApplicationUser.cs
 E:\VSProjects\OpenPriceConfig\src\OpenPriceConfig\Models\BracketPricing.cs
 E:\VSProjects\OpenPriceConfig\src\OpenPriceConfig\Models\Configurator.cs
+E:\VSProjects\OpenPriceConfig\src\OpenPriceConfig\Models\ConfiguratorFormViewModel.cs
 E:\VSProjects\OpenPriceConfig\src\OpenPriceConfig\Models\Locale.cs
 E:\VSProjects\OpenPriceConfig\src\OpenPriceConfig\Models\OfferViewModel.cs
 E:\VSProjects\OpenPriceConfig\src\OpenPriceConfig\Models\Option.cs
