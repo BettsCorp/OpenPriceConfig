@@ -9,6 +9,7 @@ using OpenPriceConfig.Models;
 using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace OpenPriceConfig.Controllers
 {
@@ -43,20 +44,6 @@ namespace OpenPriceConfig.Controllers
                 return RedirectToAction(nameof(HomeController.Empty));
             }
 
-            //if (id == null)
-            //{
-            //    configurator = await query.FirstAsync();
-            //}
-            //else
-            //{
-            //    configurator = await query.SingleAsync(c => c.ID == id);
-            //}
-
-            //if(configurator == null)
-            //{
-            //    return RedirectToAction(nameof(HomeController.Empty));
-            //}
-
             return View(configurator);
         }
 
@@ -82,24 +69,29 @@ namespace OpenPriceConfig.Controllers
             var numberOfFloors = int.Parse(dict["NUMBER_OF_FLOORS"].ToString());
             var numberOfWires = int.Parse(dict["NUMBER_OF_WIRES"].ToString());
 
-            vm.Items.Add(new OfferViewModel.OfferItem() {
-                HasPrice = false,
-                Name = "Antal våningar",
-                TextValue = numberOfFloors.ToString()
-            });
-
-            vm.Items.Add(new OfferViewModel.OfferItem()
-            {
-                HasPrice = false,
-                Name = "Antal vajrar",
-                TextValue = numberOfWires.ToString()
-            });
-
             foreach (var kvp in dict)
             {
                 Option option = null;
 
-                if (kvp.Key.StartsWith("ITEM_"))
+                if(kvp.Key == "NUMBER_OF_FLOORS")
+                {
+                    vm.Items.Add(new OfferViewModel.OfferItem()
+                    {
+                        HasPrice = false,
+                        Name = "Antal våningar",
+                        TextValue = numberOfFloors.ToString()
+                    });
+                }
+                else if(kvp.Key == "NUMBER_OF_WIRES")
+                {
+                    vm.Items.Add(new OfferViewModel.OfferItem()
+                    {
+                        HasPrice = false,
+                        Name = "Antal linor",
+                        TextValue = numberOfWires.ToString()
+                    });
+                }
+                else if (kvp.Key.StartsWith("ITEM_"))
                 {
                     var inputId = int.Parse(kvp.Key.Replace("ITEM_", ""));
                     option = configurator.Options.Where(o => o.ID == inputId).Single();
