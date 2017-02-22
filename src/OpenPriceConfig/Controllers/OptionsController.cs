@@ -232,12 +232,13 @@ namespace OpenPriceConfig.Controllers
                 .Include(o => o.BracketPricing)
                 .FirstAsync();
 
-            var bpList = bracketPricing.ToList();
+            var bpFormList = bracketPricing.ToList();
+            var bpOptionList = option.BracketPricing.OrderBy(bp => bp.Level).ToList();
 
             for (int i = 0; i < option.BracketPricing.Count; i++)
             {
-                option.BracketPricing[i].Price = bpList[i].Price;
-                _context.Update(option.BracketPricing[i]);
+                bpOptionList[i].Price = bpFormList[i].Price;
+                _context.Update(bpOptionList[i]);
             }
 
             await _context.SaveChangesAsync();
