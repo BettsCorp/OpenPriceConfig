@@ -66,6 +66,7 @@ namespace OpenPriceConfig.Controllers
 
             vm.Name = configurator.Name;
 
+            var numberOfFittings = int.Parse(dict["NUMBER_OF_FITTINGS"].ToString());
             var numberOfFloors = int.Parse(dict["NUMBER_OF_FLOORS"].ToString());
             var numberOfWires = int.Parse(dict["NUMBER_OF_WIRES"].ToString());
             var discount = int.Parse(dict["DISCOUNT"].ToString());
@@ -112,6 +113,7 @@ namespace OpenPriceConfig.Controllers
 
                         Name = option.Name,
                         Description = option.DescriptionLocale.Text,
+                        OptionTag = option.OptionTag,
                         Price = option.GetPrice(numberOfFloors, numberOfWires),
                         TextValue = option.InputType == Option.InputTypes.Numeric ||
                                     option.InputType == Option.InputTypes.Text ?
@@ -126,6 +128,15 @@ namespace OpenPriceConfig.Controllers
                     vm.Items.Add(oi);
 
                 }
+            }
+
+            var taa = vm.Items.Find(item => item.OptionTag == "TYP_AV_ARMATUR");
+            if(taa != null)
+            {
+                taa.Price *= numberOfFittings;
+                taa.Description = $"{numberOfFittings}st";
+                if(numberOfFittings == 0)
+                    vm.Items.Remove(taa);
             }
 
             return View(vm);

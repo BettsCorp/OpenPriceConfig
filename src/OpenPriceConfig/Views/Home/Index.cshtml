@@ -18,6 +18,8 @@
 
     Model.Options.Add(new Option() { Order = 920, InputType = Option.InputTypes.HorizontalRule });
 
+    Model.Options.Add(new Option() { Order = 8500, InputType = Option.InputTypes.Numeric, Name = "Antal armaturer"});
+
     Model.Options.Add(new Option() { Order = 20000, InputType = Option.InputTypes.HorizontalRule });
 
     Model.Options.Add(new Option()
@@ -25,6 +27,8 @@
         Order = 20001,
         Name = "Rabatt"
     });
+
+
 
 
 
@@ -56,6 +60,14 @@
                     <label for="NUMBER_OF_WIRES">Antal linor</label>
                     <input type="number" class="form-control" id="NUMBER_OF_WIRES" name="NUMBER_OF_WIRES" min="1" max="@Model.WiresNumber" value="1" />
                     <span class="text-danger field-validation-valid" data-valmsg-for="NUMBER_OF_WIRES" data-valmsg-replace="true"></span>
+                </div>
+            }
+            else if (item.Order == 8500)
+            {
+                <div class="form-group">
+                    <label for="NUMBER_OF_FITTINGS">Antal armaturer</label>
+                    <input type="number" class="form-control" id="NUMBER_OF_FITTINGS" name="NUMBER_OF_FITTINGS" min="0" max="100" value="0" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="NUMBER_OF_FITTINGS" data-valmsg-replace="true"></span>
                 </div>
             }
             else if (item.Order == 20001)

@@ -24,6 +24,7 @@ namespace OpenPriceConfig.Models
             public decimal Price { get; set; }
             public string TextValue { get; set; }
             public bool HasPrice { get; set; }
+            public string OptionTag { get; set; }
         }
 
     }
